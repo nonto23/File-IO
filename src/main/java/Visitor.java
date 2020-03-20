@@ -1,11 +1,10 @@
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalTime;
-import java.time.LocalDate;
-import java.util.Scanner;
-import java.util.Calendar;
 
+import java.util.Scanner;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -16,32 +15,20 @@ public class Visitor
 
     private static final Logger logger = LogManager.getLogger(Visitor.class.getName());
 
-    private static String fullname,comments,assistance;
-    private static int age;
 
 
-//  public Visitor(String fullname,int Age,String comments,String assistance)
-//  {
-//      this.fullname = fullname;
-//      this.comments = comments;
-//      this.assistance = assistance;
-//      this.age = Age;
-//  }
-
-
-    public static void saveFile(String fullname,int Age,String comments,String assistance) throws IOException
+    public static String saveFile(String fullname,int Age,String date,String time,String comments,String assistance)
     {
-         Calendar calobj = Calendar.getInstance();
 
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-
-        File myFile = new File("visitor_{"+fullname.toLowerCase()+"}.txt");
-        FileWriter myWriter = new FileWriter(myFile);
+        try
+        {
 
 
+            String full_Name = fullname.replace(" ", "_");      //replacing spaces with underscore
+            File myFile = new File("visitor_{"+full_Name.toLowerCase()+"}.txt");
+            FileWriter myWriter = new FileWriter(myFile);
 
-            myWriter.write("full-name: "+fullname+"\n" +
+            myWriter.write("full-name: "+full_Name+"\n" +
                     "age :"+Age+"\n " +
                     "date of Visit: "+ date+"\n " +
                     "Time of visit: " + time+
@@ -49,55 +36,63 @@ public class Visitor
                     "\n Assistance :"+assistance);
 
             myWriter.close();
+            logger.info("File successfully created");
+        }catch (Exception e)
+        {
+            logger.error("Error"+e.getMessage());
+        }
 
-            if(myFile.createNewFile())
-            {
-                logger.debug("File created"+myFile.getName());
-            }
-           else
-           {
-               logger.error("File already exist");
-           }
 
+       return "File created";
 
     }
 
-    public static void loadFile()
+    public static void loadFile(String name )
     {
+        try {
 
+            File file = new File("visitor_" +name.toLowerCase().replace(" ", "_") + ".txt");
+            Scanner readers = new Scanner(file);
+            while (readers.hasNextLine()) {
+                String read = readers.nextLine();
+                logger.info(read);
+            }
+            readers.close();
+        } catch (FileNotFoundException e) {
+            logger.error("An error occurred.");
+            e.printStackTrace();
+        }
+
+//
     }
-
 
     public static void main(String[] args)
     {
         Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the your fullname ");
+        String name =scan.nextLine();
 
 
-
-
-
-
-        try
-        {
-            System.out.println("Enter the your fullname ");
-            String name =scan.nextLine();
 
             System.out.println("Enter the your age ");
             int age =scan.nextInt();
 
+             System.out.println("Enter the currents date ");
+             String date =scan.next();
+             System.out.println("Enter the current time ");
+             String Time =scan.next();
             System.out.println("Enter the your Assistance ");
             String assistance =scan.next();
 
             System.out.println("Enter the your comments ");
             String comments =scan.next();
 
+            //calling save method
+            saveFile(name,age,date,Time,comments,assistance);
 
-                saveFile(name,age,comments,assistance);
-            logger.info("File created");
-
-        }catch (Exception e)
-        {
-            logger.error("Error!"+e.getMessage());
-        }
+            //calling load method
+             loadFile(name);
     }
+
+
 }

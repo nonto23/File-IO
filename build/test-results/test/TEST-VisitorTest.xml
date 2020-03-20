@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="VisitorTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-03-20T11:36:44" hostname="Hp" time="3.018">
+  <properties/>
+  <testcase name="save" classname="VisitorTest" time="3.018"/>
+  <system-out><![CDATA[13:36:47.350 [Test worker] INFO  Visitor - File successfully created
+13:36:47.409 [Test worker] INFO  Visitor - File successfully created
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
